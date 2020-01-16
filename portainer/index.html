@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Traefik - My Docs</title>
+  <title>Portainer - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Traefik";
-    var mkdocs_page_input_path = "traefik.md";
+    var mkdocs_page_name = "Portainer";
+    var mkdocs_page_input_path = "portainer.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -58,29 +58,29 @@
     <a class="" href="../install_docker/">Docker</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../traefik/">Traefik</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
-    <a class="current" href="./">Traefik</a>
+    <a class="current" href="./">Portainer</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#swarm-mode">swarm mode</a></li>
+    <li class="toctree-l2"><a href="#deploy-portainer-swarm-mode">deploy portainer swarm mode</a></li>
     
 
-    <li class="toctree-l2"><a href="#persiapan">Persiapan</a></li>
+    <li class="toctree-l2"><a href="#deploy-portainer-single-node">deploy portainer single node</a></li>
     
 
-    <li class="toctree-l2"><a href="#buat-lokal-dns">Buat lokal DNS</a></li>
+    <li class="toctree-l2"><a href="#cek">Cek</a></li>
     
 
-    <li class="toctree-l2"><a href="#single-node-optional">single node (optional)</a></li>
+    <li class="toctree-l2"><a href="#cek-user-interface">Cek User Interface</a></li>
     
 
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../portainer/">Portainer</a>
 	    </li>
           
         </ul>
@@ -105,7 +105,7 @@
     
       
     
-    <li>Traefik</li>
+    <li>Portainer</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -115,117 +115,111 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="swarm-mode">swarm mode</h3>
-<h3 id="persiapan">Persiapan</h3>
-<p>referensi:</p>
-<p>https://docs.traefik.io/user-guide/docker-and-lets-encrypt/ <br />
-https://github.com/wekan/wekan/wiki/Traefik-and-self-signed-SSL-certs</p>
-<p>membuat network yang digunakan oleh traefik dan container</p>
-<pre><code>docker network create --driver=overlay traefik-public
-docker network ls
+                <p>Persiapan
+Pastikan network traefik-public sudah ada
+a. buat domain untuk dashboard portainer
+contoh:<br />
+portainer-arsip.karangasemkab.go.id</p>
+<pre><code>export DOMAIN=portainer-arsip.nama_simpul.go.id \
+&amp;&amp; export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}') \
+&amp;&amp; docker node update --label-add portainer.portainer-data=true $NODE_ID
 </code></pre>
 
-<p>membuat env variable, sesuaikan parameter</p>
-<pre><code>export EMAIL=nama_email &amp;&amp;
-export DOMAIN=nama_root_domain &amp;&amp;
-export USERNAME=admin &amp;&amp;
-export PASSWORD=changethis &amp;&amp;
-export HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD) &amp;&amp;
-echo $HASHED_PASSWORD &amp;&amp;
-export CONSUL_REPLICAS=0 &amp;&amp;
-export TRAEFIK_REPLICAS=1
+<p>b. arahkan domain tersebut ke host docker (Private/Puclic IP)</p>
+<p>download/buat docker-compose untuk portainer simpan dalam file portainer.yml</p>
+<pre><code>mkdir -p /opt/portainer \
+&amp;&amp; cd /opt/portainer/ \
+&amp;&amp; curl https://raw.githubusercontent.com/gitsikn/atom/stable/2.5.x/docker/portainer.yml -o portainer.yml
 </code></pre>
 
-<p>Download file konfigurasi traefik</p>
-<pre><code>mkdir /opt/traefik \
-&amp;&amp; cd /opt/traefik \
-&amp;&amp; curl -L https://raw.githubusercontent.com/gitsikn/atom/stable/2.5.x/docker/traefik.yml -o traefik.yml
+<p>untuk mode docker-swarm<br />
+nano portainer.yml</p>
+<pre><code>version: '3.3'
+
+services:
+  agent:
+    image: portainer/agent
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - agent-network
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.platform.os == linux
+
+  portainer:
+    image: portainer/portainer
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    volumes:
+      - portainer-data:/data
+    networks:
+      - agent-network
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.portainer.portainer-data == true
+      labels:
+        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set}
+        - traefik.enable=true
+        - traefik.port=9000
+        - traefik.tags=traefik-public
+        - traefik.docker.network=traefik-public
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+
+networks:
+  agent-network:
+    attachable: true
+  traefik-public:
+    external: true
+
+volumes:
+  portainer-data:
 </code></pre>
 
-<p>deploy traefik-consul</p>
-<pre><code>docker stack deploy -c traefik.yml traefik-consul
-docker stack ps traefik-consul
-</code></pre>
-
-<p>melihat log</p>
-<pre><code>docker service logs traefik-consul_traefik
-</code></pre>
-
-<h3 id="buat-lokal-dns">Buat lokal DNS</h3>
-<p>C:\Windows\System32\drivers\etc  </p>
-<p>test web ui traefik
-https://traefik-arsip.nama_domain</p>
-<p>test web-ui consul
-https://consul-arsip.nama_domain</p>
-<h3 id="single-node-optional">single node (optional)</h3>
-<pre><code>docker network create web
-mkdir -p /opt/traefik
-
-touch /opt/traefik/docker-compose.yml
-</code></pre>
-
+<p>untuk single node</p>
 <pre><code>version: '2'
 
 services:
-  traefik:
-    image: traefik
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
     restart: always
     ports:
-      - 80:80
-      - 443:443
-    networks:
-      - web
+      - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/traefik/traefik.toml:/traefik.toml
-      - /opt/traefik/acme.json:/acme.json
-    container_name: traefik
+      - portainer_data:/data
 
-networks:
-  web:
-    external: true
+volumes:
+  portainer_data:
 </code></pre>
 
-<hr />
-<pre><code>touch /opt/traefik/acme.json &amp;&amp; chmod 600 /opt/traefik/acme.json
-
-touch /opt/traefik/traefik.toml
+<h3 id="deploy-portainer-swarm-mode">deploy portainer swarm mode</h3>
+<pre><code>docker stack deploy -c portainer.yml portainer
 </code></pre>
 
-<pre><code>debug = false
-
-logLevel = &quot;ERROR&quot;
-defaultEntryPoints = [&quot;https&quot;,&quot;http&quot;]
-
-[entryPoints]
-  [entryPoints.http]
-  address = &quot;:80&quot;
-    [entryPoints.http.redirect]
-    entryPoint = &quot;https&quot;
-  [entryPoints.https]
-  address = &quot;:443&quot;
-  [entryPoints.https.tls]
-
-[retry]
-
-[docker]
-endpoint = &quot;unix:///var/run/docker.sock&quot;
-domain = &quot;dispustaka.karangasemkab.go.id&quot;
-watch = true
-exposedByDefault = false
+<h3 id="deploy-portainer-single-node">deploy portainer single node</h3>
+<pre><code>docker-compose -f portainer.yml up -d
 </code></pre>
 
-<pre><code>[acme]
-email = &quot;eka.wd88@gmail.com&quot;
-storage = &quot;acme.json&quot;
-entryPoint = &quot;https&quot;
-onHostRule = true
-[acme.httpChallenge]
-entryPoint = &quot;http&quot;
+<h3 id="cek">Cek</h3>
+<pre><code>docker ps
+docker logs portainer_container_id
 </code></pre>
 
-<p>docker-compose -f docker-compose.yml up -d
-```</p>
+<h3 id="cek-user-interface">Cek User Interface</h3>
+<p>https://portainer.domain_name</p>
               
             </div>
           </div>
@@ -233,10 +227,8 @@ entryPoint = &quot;http&quot;
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../portainer/" class="btn btn-neutral float-right" title="Portainer">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../install_docker/" class="btn btn-neutral" title="Docker"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../traefik/" class="btn btn-neutral" title="Traefik"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -262,10 +254,8 @@ entryPoint = &quot;http&quot;
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../install_docker/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../traefik/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../portainer/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
