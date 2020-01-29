@@ -91,7 +91,15 @@
     <li class="toctree-l2"><a href="#update-rhv-host">Update RHV Host</a></li>
     
 
+    <li class="toctree-l2"><a href="#download-log-dari-rhv">Download log dari rhv</a></li>
+    
+
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../database/">Database</a>
 	    </li>
           
         </ul>
@@ -144,12 +152,19 @@ From the RHV-M GUI, put the host into maintenance, then click 'Installation -&gt
 <pre><code>yum -y update
 shutdown -r now
 </code></pre>
+
+<h2 id="download-log-dari-rhv">Download log dari rhv</h2>
+<pre><code>ovirt-log-collector
+sos-collector
+</code></pre>
               
             </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../database/" class="btn btn-neutral float-right" title="Database">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../dashboard/" class="btn btn-neutral" title="Dashboard"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -180,6 +195,8 @@ shutdown -r now
       
         <span><a href="../dashboard/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../database/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

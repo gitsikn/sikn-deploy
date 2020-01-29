@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Portainer - My Docs</title>
+  <title>Database - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Portainer";
-    var mkdocs_page_input_path = "portainer.md";
+    var mkdocs_page_name = "Database";
+    var mkdocs_page_input_path = "database.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -63,24 +63,9 @@
     <a class="" href="../traefik/">Traefik</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Portainer</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#deploy-portainer-swarm-mode">deploy portainer swarm mode</a></li>
-    
-
-    <li class="toctree-l2"><a href="#deploy-portainer-single-node">deploy portainer single node</a></li>
-    
-
-    <li class="toctree-l2"><a href="#cek">Cek</a></li>
-    
-
-    <li class="toctree-l2"><a href="#cek-user-interface">Cek User Interface</a></li>
-    
-
-    </ul>
+    <a class="" href="../portainer/">Portainer</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -103,9 +88,24 @@
     <a class="" href="../rhv/">RHV</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../database/">Database</a>
+    <a class="current" href="./">Database</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#backup-percona-database">Backup Percona Database</a></li>
+    
+
+    <li class="toctree-l2"><a href="#install-xtrabackup">Install xtrabackup</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#restore-percona-database">Restore Percona Database</a></li>
+        
+        </ul>
+    
+
+    </ul>
 	    </li>
           
         </ul>
@@ -130,7 +130,7 @@
     
       
     
-    <li>Portainer</li>
+    <li>Database</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -140,111 +140,21 @@
           <div role="main">
             <div class="section">
               
-                <p>Persiapan
-Pastikan network traefik-public sudah ada
-a. buat domain untuk dashboard portainer
-contoh:<br />
-portainer-arsip.karangasemkab.go.id</p>
-<pre><code>export DOMAIN=portainer-arsip.nama_simpul.go.id \
-&amp;&amp; export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}') \
-&amp;&amp; docker node update --label-add portainer.portainer-data=true $NODE_ID
+                <h3 id="backup-percona-database">Backup Percona Database</h3>
+<p>Referensi:<br />
+https://www.percona.com/doc/percona-xtrabackup/2.2/xtrabackup_bin/creating_a_backup.html</p>
+<p>Proses backup menggunakan tools xtrabackup
+lokasi database pada percona: /var/lib/mysql</p>
+<h2 id="install-xtrabackup">Install xtrabackup</h2>
+<pre><code>yum install xtrabackup -y
 </code></pre>
 
-<p>b. arahkan domain tersebut ke host docker (Private/Puclic IP)</p>
-<p>download/buat docker-compose untuk portainer simpan dalam file portainer.yml</p>
-<pre><code>mkdir -p /opt/portainer \
-&amp;&amp; cd /opt/portainer/ \
-&amp;&amp; curl https://raw.githubusercontent.com/gitsikn/atom/stable/2.5.x/docker/portainer.yml -o portainer.yml
+<pre><code>xtrabackup --backup --datadir=/var/lib/mysql/ --target-dir=/data/backups/mysql/
 </code></pre>
 
-<p>untuk mode docker-swarm<br />
-nano portainer.yml</p>
-<pre><code>version: '3.3'
-
-services:
-  agent:
-    image: portainer/agent
-    environment:
-      AGENT_CLUSTER_ADDR: tasks.agent
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-    networks:
-      - agent-network
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.platform.os == linux
-
-  portainer:
-    image: portainer/portainer
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
-    volumes:
-      - portainer-data:/data
-    networks:
-      - agent-network
-      - traefik-public
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-          - node.labels.portainer.portainer-data == true
-      labels:
-        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set}
-        - traefik.enable=true
-        - traefik.port=9000
-        - traefik.tags=traefik-public
-        - traefik.docker.network=traefik-public
-        # Traefik service that listens to HTTP
-        - traefik.redirectorservice.frontend.entryPoints=http
-        - traefik.redirectorservice.frontend.redirect.entryPoint=https
-        # Traefik service that listens to HTTPS
-        - traefik.webservice.frontend.entryPoints=https
-
-networks:
-  agent-network:
-    attachable: true
-  traefik-public:
-    external: true
-
-volumes:
-  portainer-data:
-</code></pre>
-
-<p>untuk single node</p>
-<pre><code>version: '2'
-
-services:
-  portainer:
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    restart: always
-    ports:
-      - 9000:9000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
-volumes:
-  portainer_data:
-</code></pre>
-
-<h3 id="deploy-portainer-swarm-mode">deploy portainer swarm mode</h3>
-<pre><code>docker stack deploy -c portainer.yml portainer
-</code></pre>
-
-<h3 id="deploy-portainer-single-node">deploy portainer single node</h3>
-<pre><code>docker-compose -f portainer.yml up -d
-</code></pre>
-
-<h3 id="cek">Cek</h3>
-<pre><code>docker ps
-docker logs portainer_container_id
-</code></pre>
-
-<h3 id="cek-user-interface">Cek User Interface</h3>
-<p>https://portainer.domain_name</p>
+<h3 id="restore-percona-database">Restore Percona Database</h3>
+<p>Referensi:<br />
+https://www.percona.com/doc/percona-xtrabackup/2.1/xtrabackup_bin/restoring_a_backup.html</p>
               
             </div>
           </div>
@@ -252,10 +162,8 @@ docker logs portainer_container_id
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../extend_disk/" class="btn btn-neutral float-right" title="Extend Disk Size">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../traefik/" class="btn btn-neutral" title="Traefik"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../rhv/" class="btn btn-neutral" title="RHV"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -281,10 +189,8 @@ docker logs portainer_container_id
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../traefik/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../rhv/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../extend_disk/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
