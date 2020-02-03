@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Best Practice Migrasi Perpusnas ANRI - My Docs</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Best Practice Migrasi Perpusnas ANRI";
+    var mkdocs_page_input_path = "bestpractise.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> My Docs</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_docker/">Docker</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traefik/">Traefik</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../portainer/">Portainer</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../extend_disk/">Extend Disk Size</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../redhat_subscription/">Redhat subscription</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dashboard/">Dashboard</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../rhv/">RHV</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../database/">Database</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Best Practice Migrasi Perpusnas ANRI</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#versi-qa-26x">Versi qa 2.6.x</a></li>
+    
+
+    <li class="toctree-l2"><a href="#referensi-docker-stack">referensi docker-stack</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#membuat-database-baru">Membuat database baru</a></li>
+        
+            <li><a class="toctree-l3" href="#download-data">Download data</a></li>
+        
+            <li><a class="toctree-l3" href="#copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</a></li>
+        
+            <li><a class="toctree-l3" href="#restore-database">Restore Database</a></li>
+        
+            <li><a class="toctree-l3" href="#upgrade-database">Upgrade Database</a></li>
+        
+            <li><a class="toctree-l3" href="#download-objek-digital">Download Objek Digital</a></li>
+        
+            <li><a class="toctree-l3" href="#logo-dan-favicon">Logo dan Favicon</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">My Docs</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Best Practice Migrasi Perpusnas ANRI</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>konek ke vpn</p>
+<p>Login ke server/portainer dimana aplikasi akan dideploy: <br />
+a. worker1<br />
+b. worker2<br />
+c. worker3<br />
+d. worker4<br />
+e. worker5<br />
+f. worker6   </p>
+<pre><code>cd /sikn \
+&amp;&amp; sudo git clone -b stable/2.5.x https://github.com/gitsikn/atom.git nama_simpul
+</code></pre>
+
+<h3 id="versi-qa-26x">Versi qa 2.6.x</h3>
+<pre><code>cd /sikn \
+git clone -b qa/2.6.x https://github.com/artefactual/atom.git nama_simpul
+</code></pre>
+
+<pre><code>sudo chmod -R 777 /sikn/nama_simpul/percona_data \
+&amp;&amp; sudo chmod -R 777 /sikn/nama_simpul/elasticsearch_data
+</code></pre>
+
+<h2 id="referensi-docker-stack">referensi docker-stack</h2>
+<blockquote>
+<p>https://github.com/gitsikn/atom/blob/stable/2.5.x/docker/docker-stack.yml</p>
+<p>sesuaikan nama_simpul dengan nama simpul yang akan dideploy</p>
+</blockquote>
+<ol>
+<li>Masuk kedalam Portainer
+membuat stack dengan nama simpul</li>
+</ol>
+<p>deploy</p>
+<p>jalankan di container "atom"</p>
+<pre><code>make -C plugins/arDominionPlugin \
+&amp;&amp; php symfony tools:purge --demo
+</code></pre>
+
+<p>publish port (jangan bentrok)</p>
+<p>test di browser
+http://192.168.101.100:63106</p>
+<p>https://github.com/gitsikn/docker_documentation/wiki/6.-Migrasi-Data</p>
+<h3 id="membuat-database-baru">Membuat database baru</h3>
+<blockquote>
+<p>Lokasi Eksekusi: Container Percona (database)</p>
+</blockquote>
+<pre><code>mysql -u root -p -e 'drop database nama_simpul;'
+mysql -u root -p -e 'create database nama_simpul character set utf8 collate utf8_unicode_ci;'
+</code></pre>
+
+<h3 id="download-data">Download data</h3>
+<p>mkdir -p /sikn/backup_data/nama_simpul  </p>
+<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+</code></pre>
+
+<p>atau jika menggunakan port tertentu</p>
+<pre><code>rsync -r -v --progress -e 'ssh -p 221' anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+</code></pre>
+
+<h3 id="copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</h3>
+<pre><code>cp -rf /sikn/backup_data/nama_simpul/nama_simpul.sql /sikn/nama_simpul/percona_data
+
+</code></pre>
+
+<h3 id="restore-database">Restore Database</h3>
+<blockquote>
+<p>lokasi: Container Database</p>
+</blockquote>
+<pre><code>mysql -u root -p nama_simpul &lt; /var/lib/mysql/nama_simpul.sql;
+</code></pre>
+
+<h3 id="upgrade-database">Upgrade Database</h3>
+<blockquote>
+<p>lokasi: container atom</p>
+</blockquote>
+<pre><code>php symfony tools:upgrade-sql
+</code></pre>
+
+<pre><code>php symfony cc \
+&amp;&amp; php symfony search:populate
+</code></pre>
+
+<h3 id="download-objek-digital">Download Objek Digital</h3>
+<pre><code>mkdir -p /sikn/backup_data/nama_simpul/ \
+cd /sikn/backup_data/nama_simpul \
+&amp;&amp; rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/uploads /sikn/backup_data/nama_simpul/
+</code></pre>
+
+<pre><code>cp -rf /sikn/backup_data/nama_simpul/uploads /sikn/nama_simpul/ \
+&amp;&amp; chmod -R 0755 /sikn/nama_simpul/uploads
+</code></pre>
+
+<h3 id="logo-dan-favicon">Logo dan Favicon</h3>
+<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/images/logo.png /sikn/backup_data/nama_simpul
+</code></pre>
+
+<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/favicon.ico /sikn/backup_data/nama_simpul
+</code></pre>
+
+<p>```
+cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
+&amp;&amp; chmod -R 0755 /sikn/nama_simpul/favicon.ico</p>
+<p>cp -rf /sikn/backup_data/nama_simpul/logo.png /sikn/nama_simpul/ \
+&amp;&amp; chmod -R 0755 /sikn/nama_simpul/images/logo.png</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../database/" class="btn btn-neutral" title="Database"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../database/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
