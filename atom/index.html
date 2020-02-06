@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Traefik - My Docs</title>
+  <title>Install Atom - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Traefik";
-    var mkdocs_page_input_path = "traefik.md";
+    var mkdocs_page_name = "Install Atom";
+    var mkdocs_page_input_path = "atom.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -58,24 +58,9 @@
     <a class="" href="../install_docker/">Docker</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Traefik</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#swarm-mode">swarm mode</a></li>
-    
-
-    <li class="toctree-l2"><a href="#persiapan">Persiapan</a></li>
-    
-
-    <li class="toctree-l2"><a href="#buat-lokal-dns">Buat lokal DNS</a></li>
-    
-
-    <li class="toctree-l2"><a href="#single-node-optional">single node (optional)</a></li>
-    
-
-    </ul>
+    <a class="" href="../traefik/">Traefik</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -113,9 +98,27 @@
     <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../atom/">Install Atom</a>
+    <a class="current" href="./">Install Atom</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#4-install-atom">4. Install AtoM</a></li>
+    
+
+    <li class="toctree-l2"><a href="#5-membuat-env-variable-dan-menjalankan-container-optional">5. membuat env variable dan menjalankan container (optional)</a></li>
+    
+
+    <li class="toctree-l2"><a href="#mode-docker-swarm">mode docker swarm</a></li>
+    
+
+    <li class="toctree-l2"><a href="#6-build-stylesheets">6. build stylesheets</a></li>
+    
+
+    <li class="toctree-l2"><a href="#7-purgehapus-data-dari-database-atom-dengan-mengunakan-mode-demo">7. purge/hapus data dari database atom dengan mengunakan mode demo</a></li>
+    
+
+    </ul>
 	    </li>
           
         </ul>
@@ -140,7 +143,7 @@
     
       
     
-    <li>Traefik</li>
+    <li>Install Atom</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -150,117 +153,91 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="swarm-mode">swarm mode</h3>
-<h3 id="persiapan">Persiapan</h3>
-<p>referensi:</p>
-<p>https://docs.traefik.io/user-guide/docker-and-lets-encrypt/ <br />
-https://github.com/wekan/wekan/wiki/Traefik-and-self-signed-SSL-certs</p>
-<p>membuat network yang digunakan oleh traefik dan container</p>
-<pre><code>docker network create --driver=overlay traefik-public
-docker network ls
+                <h3 id="4-install-atom">4. Install AtoM</h3>
+<p><strong>Catatan: Instalasi pada simpul resource tidak dibatasi</strong>
+versi 2.5</p>
+<p>sesuaikan <strong>nama_simpul</strong>, konfigurasi pada file <strong>sikn.yml</strong> di docker-yml/sikn.yml
+find and replace nama_simpul dengan nama simpul baru (alt + r) pada nano editor<br />
+pastikan port pada service nginx belum digunakan sebelumnya</p>
+<pre><code>mkdir -p /sikn \
+&amp;&amp; cd /sikn \
+&amp;&amp; git clone -b stable/2.5.x https://github.com/gitsikn/atom.git nama_simpul &amp;&amp; cd /sikn/nama_simpul/docker/
 </code></pre>
 
-<p>membuat env variable, sesuaikan parameter</p>
-<pre><code>export EMAIL=nama_email &amp;&amp;
-export DOMAIN=nama_root_domain &amp;&amp;
-export USERNAME=admin &amp;&amp;
-export PASSWORD=changethis &amp;&amp;
-export HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD) &amp;&amp;
-echo $HASHED_PASSWORD &amp;&amp;
-export CONSUL_REPLICAS=0 &amp;&amp;
-export TRAEFIK_REPLICAS=1
+<pre><code>chmod -R 755 /nama_simpul
 </code></pre>
 
-<p>Download file konfigurasi traefik</p>
-<pre><code>mkdir /opt/traefik \
-&amp;&amp; cd /opt/traefik \
-&amp;&amp; curl -L https://raw.githubusercontent.com/gitsikn/atom/stable/2.5.x/docker/traefik.yml -o traefik.yml
+<pre><code>sudo chmod -R 777 /sikn/nama_simpul/percona_data \
+&amp;&amp; sudo chmod -R 777 /sikn/nama_simpul/elasticsearch_data
 </code></pre>
 
-<p>deploy traefik-consul</p>
-<pre><code>docker stack deploy -c traefik.yml traefik-consul
-docker stack ps traefik-consul
+<p>sesuikan parameter database pada file docker-stack.yml</p>
+<p>password dapat digenerate menggunakan tools keypass</p>
+<pre><code>...
+#percona_database
+  percona:
+    image: percona:5.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=changethis
+      - MYSQL_DATABASE=nama_simpul
+      - MYSQL_USER=nama_simpul
+      - MYSQL_PASSWORD=changethis
+...
 </code></pre>
 
-<p>melihat log</p>
-<pre><code>docker service logs traefik-consul_traefik
+<h3 id="5-membuat-env-variable-dan-menjalankan-container-optional">5. membuat env variable dan menjalankan container (optional)</h3>
+<pre><code>export COMPOSE_FILE=&quot;$PWD/docker/docker-compose.dev.yml&quot;
 </code></pre>
 
-<h3 id="buat-lokal-dns">Buat lokal DNS</h3>
-<p>C:\Windows\System32\drivers\etc  </p>
-<p>test web ui traefik
-https://traefik-arsip.nama_domain</p>
-<p>test web-ui consul
-https://consul-arsip.nama_domain</p>
-<h3 id="single-node-optional">single node (optional)</h3>
-<pre><code>docker network create web
-mkdir -p /opt/traefik
-
-touch /opt/traefik/docker-compose.yml
+<p>atau dieksekusi dengan pilihan -f lokasi_file</p>
+<pre><code>cd nama_simpul
+docker-compose -f docker-compose.yml up -d
 </code></pre>
 
-<pre><code>version: '2'
-
-services:
-  traefik:
-    image: traefik
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/traefik/traefik.toml:/traefik.toml
-      - /opt/traefik/acme.json:/acme.json
-    container_name: traefik
-
-networks:
-  web:
-    external: true
+<h3 id="mode-docker-swarm">mode docker swarm</h3>
+<pre><code>docker stack deploy -c docker-stack.yml nama_simpul
 </code></pre>
 
-<hr />
-<pre><code>touch /opt/traefik/acme.json &amp;&amp; chmod 600 /opt/traefik/acme.json
-
-touch /opt/traefik/traefik.toml
+<p>periksa seluruh container hingga seluruh container dengan status running</p>
+<pre><code>docker stack ls
+docker stack ps nama_stack
+docker service logs nama_service
 </code></pre>
 
-<pre><code>debug = false
-
-logLevel = &quot;ERROR&quot;
-defaultEntryPoints = [&quot;https&quot;,&quot;http&quot;]
-
-[entryPoints]
-  [entryPoints.http]
-  address = &quot;:80&quot;
-    [entryPoints.http.redirect]
-    entryPoint = &quot;https&quot;
-  [entryPoints.https]
-  address = &quot;:443&quot;
-  [entryPoints.https.tls]
-
-[retry]
-
-[docker]
-endpoint = &quot;unix:///var/run/docker.sock&quot;
-domain = &quot;dispustaka.karangasemkab.go.id&quot;
-watch = true
-exposedByDefault = false
+<pre><code>docker ps -a
 </code></pre>
 
-<pre><code>[acme]
-email = &quot;eka.wd88@gmail.com&quot;
-storage = &quot;acme.json&quot;
-entryPoint = &quot;https&quot;
-onHostRule = true
-[acme.httpChallenge]
-entryPoint = &quot;http&quot;
+<h3 id="6-build-stylesheets">6. build stylesheets</h3>
+<pre><code>docker ps
+docker-compose -f docker-compose-file.yml exec service_name make -C plugins/arDominionPlugin
 </code></pre>
 
-<p>docker-compose -f docker-compose.yml up -d
-```</p>
+<p>atau</p>
+<pre><code>docker exec container_id make -C plugins/arDominionPlugin
+</code></pre>
+
+<p>atau<br />
+masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
+<pre><code>make -C plugins/arDominionPlugin
+</code></pre>
+
+<h3 id="7-purgehapus-data-dari-database-atom-dengan-mengunakan-mode-demo">7. purge/hapus data dari database atom dengan mengunakan mode demo</h3>
+<pre><code>docker-compose exec atom php symfony tools:purge --demo
+php symfony cc &amp;&amp; php symfony search:populate
+</code></pre>
+
+<p>atau
+masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
+<pre><code>php symfony tools:purge --demo
+</code></pre>
+
+<ol>
+<li>restart container worker</li>
+</ol>
+<pre><code>docker restart $(docker ps -a -q)
+</code></pre>
+
+<p>melihat seluruh container dengan status up/exited</p>
               
             </div>
           </div>
@@ -268,10 +245,8 @@ entryPoint = &quot;http&quot;
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../portainer/" class="btn btn-neutral float-right" title="Portainer">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../install_docker/" class="btn btn-neutral" title="Docker"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../bestpractise/" class="btn btn-neutral" title="Best Practice Migrasi Perpusnas ANRI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -297,10 +272,8 @@ entryPoint = &quot;http&quot;
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../install_docker/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../bestpractise/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../portainer/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
