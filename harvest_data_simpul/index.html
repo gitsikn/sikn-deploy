@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Best Practice Migrasi Perpusnas ANRI - My Docs</title>
+  <title>Harvest data simpul ke JIKN - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Best Practice Migrasi Perpusnas ANRI";
-    var mkdocs_page_input_path = "bestpractise.md";
+    var mkdocs_page_name = "Harvest data simpul ke JIKN";
+    var mkdocs_page_input_path = "harvest_data_simpul.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -83,36 +83,9 @@
     <a class="" href="../migrasi/">Migrasi Data</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Best Practice Migrasi Perpusnas ANRI</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#versi-qa-26x">Versi qa 2.6.x</a></li>
-    
-
-    <li class="toctree-l2"><a href="#referensi-docker-stack">referensi docker-stack</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#membuat-database-baru">Membuat database baru</a></li>
-        
-            <li><a class="toctree-l3" href="#download-data">Download data</a></li>
-        
-            <li><a class="toctree-l3" href="#copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</a></li>
-        
-            <li><a class="toctree-l3" href="#restore-database">Restore Database</a></li>
-        
-            <li><a class="toctree-l3" href="#upgrade-database">Upgrade Database</a></li>
-        
-            <li><a class="toctree-l3" href="#download-objek-digital">Download Objek Digital</a></li>
-        
-            <li><a class="toctree-l3" href="#logo-dan-favicon">Logo dan Favicon</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -155,9 +128,26 @@
     <a class="" href="../database/">Database</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../harvest_data_simpul/">Harvest data simpul ke JIKN</a>
+    <a class="current" href="./">Harvest data simpul ke JIKN</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#harvest-data-dari-simpul-ke-jikn">Harvest data dari simpul ke JIKN</a></li>
+    
+
+    <li class="toctree-l2"><a href="#export-data">Export Data</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#format-xml">Format XML</a></li>
+        
+            <li><a class="toctree-l3" href="#format-csv">Format CSV</a></li>
+        
+        </ul>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -237,7 +227,7 @@
     
       
     
-    <li>Best Practice Migrasi Perpusnas ANRI</li>
+    <li>Harvest data simpul ke JIKN</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -247,108 +237,48 @@
           <div role="main">
             <div class="section">
               
-                <p>konek ke vpn</p>
-<p>Login ke server/portainer dimana aplikasi akan dideploy: <br />
-a. worker1<br />
-b. worker2<br />
-c. worker3<br />
-d. worker4<br />
-e. worker5<br />
-f. worker6   </p>
-<pre><code>cd /sikn \
-&amp;&amp; sudo git clone -b stable/2.5.x https://github.com/gitsikn/atom.git nama_simpul
-</code></pre>
-
-<h3 id="versi-qa-26x">Versi qa 2.6.x</h3>
-<pre><code>cd /sikn \
-git clone -b qa/2.6.x https://github.com/artefactual/atom.git nama_simpul
-</code></pre>
-
-<pre><code>sudo chmod -R 777 /sikn/nama_simpul/percona_data \
-&amp;&amp; sudo chmod -R 777 /sikn/nama_simpul/elasticsearch_data
-</code></pre>
-
-<h2 id="referensi-docker-stack">referensi docker-stack</h2>
-<blockquote>
-<p>https://github.com/gitsikn/atom/blob/stable/2.5.x/docker/docker-stack.yml</p>
-<p>sesuaikan nama_simpul dengan nama simpul yang akan dideploy</p>
-</blockquote>
+                <h3 id="harvest-data-dari-simpul-ke-jikn">Harvest data dari simpul ke JIKN</h3>
+<p>Tentukan Simpul yang akan di harvest </p>
 <ol>
-<li>Masuk kedalam Portainer
-membuat stack dengan nama simpul</li>
+<li>login ke server sumber data (ssh)</li>
+<li>masuk ke direktori simpul (/usr/share/nginx/nama_simpul)</li>
+<li>jalankan perintah export (arsip terpublikasi)</li>
 </ol>
-<p>deploy</p>
-<p>jalankan di container "atom"</p>
-<pre><code>make -C plugins/arDominionPlugin \
-&amp;&amp; php symfony tools:purge --demo
+<h2 id="export-data">Export Data</h2>
+<h3 id="format-xml">Format XML</h3>
+<pre><code>php symfony export:bulk --public --items-until-update=5 --single-slug=&quot;nama_slug&quot; /home/anri/XML_FOR_JIKN/nama_deskripsi.xml
 </code></pre>
 
-<p>publish port (jangan bentrok)</p>
-<p>test di browser
-http://192.168.101.100:63106</p>
-<p>https://github.com/gitsikn/docker_documentation/wiki/6.-Migrasi-Data</p>
-<h3 id="membuat-database-baru">Membuat database baru</h3>
-<blockquote>
-<p>Lokasi Eksekusi: Container Percona (database)</p>
-</blockquote>
-<pre><code>mysql -u root -p -e 'drop database nama_simpul;'
-mysql -u root -p -e 'create database nama_simpul character set utf8 collate utf8_unicode_ci;'
+<h3 id="format-csv">Format CSV</h3>
+<pre><code>php symfony csv:export --public --items-until-update=5 --single-slug=&quot;arsip-statis-direktorat-pembangunan-desa-ditbangdes&quot; /home/anri/XML_FOR_JIKN/arsip-statis-direktorat-pembangunan-desa-ditbangdes.csv
 </code></pre>
 
-<h3 id="download-data">Download data</h3>
-<p>mkdir -p /sikn/backup_data/nama_simpul  </p>
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+<pre><code>php symfony csv:export --single-slug=&quot;slug-name&quot; /nama-file.csv
 </code></pre>
 
-<p>atau jika menggunakan port tertentu</p>
-<pre><code>rsync -r -v --progress -e 'ssh -p 221' anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+<ol>
+<li>download file xml/csv dari server sumber data ke server tujuan</li>
+</ol>
+<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/home/anri/XML_FOR_JIKN/nama_deskripsi.xml /backup_data/
 </code></pre>
 
-<h3 id="copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</h3>
-<pre><code>cp -rf /sikn/backup_data/nama_simpul/nama_simpul.sql /sikn/nama_simpul/percona_data
-
+<p>input password</p>
+<ol>
+<li>copy file xml dari host ke atom container</li>
+</ol>
+<pre><code>docker cp /backup_data/nama_deskripsi.xml 7db0f944fd2b:/jikn/deskripsi_arsip.xml
 </code></pre>
 
-<h3 id="restore-database">Restore Database</h3>
-<blockquote>
-<p>lokasi: Container Database</p>
-</blockquote>
-<pre><code>mysql -u root -p nama_simpul &lt; /var/lib/mysql/nama_simpul.sql;
+<ol>
+<li>import file xml ke atom</li>
+</ol>
+<p>Format XML</p>
+<pre><code>php symfony import:bulk --output=&quot;/tmp/output-results.csv&quot; /jikn 
 </code></pre>
 
-<h3 id="upgrade-database">Upgrade Database</h3>
-<blockquote>
-<p>lokasi: container atom</p>
-</blockquote>
-<pre><code>php symfony tools:upgrade-sql
+<p>Format CSV</p>
+<pre><code>php symfony csv:import /jikn/nama_deskripsi.csv
 </code></pre>
-
-<pre><code>php symfony cc \
-&amp;&amp; php symfony search:populate
-</code></pre>
-
-<h3 id="download-objek-digital">Download Objek Digital</h3>
-<pre><code>mkdir -p /sikn/backup_data/nama_simpul/ \
-cd /sikn/backup_data/nama_simpul \
-&amp;&amp; rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/uploads /sikn/backup_data/nama_simpul/
-</code></pre>
-
-<pre><code>cp -rf /sikn/backup_data/nama_simpul/uploads /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/uploads
-</code></pre>
-
-<h3 id="logo-dan-favicon">Logo dan Favicon</h3>
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/images/logo.png /sikn/backup_data/nama_simpul
-</code></pre>
-
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/favicon.ico /sikn/backup_data/nama_simpul
-</code></pre>
-
-<p>```
-cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/favicon.ico</p>
-<p>cp -rf /sikn/backup_data/nama_simpul/logo.png /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/images/logo.png</p>
               
             </div>
           </div>
@@ -356,10 +286,10 @@ cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../custom_atom/" class="btn btn-neutral float-right" title="Custom AtoM">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../install_mkdocs/" class="btn btn-neutral float-right" title="Mkdocs">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../migrasi/" class="btn btn-neutral" title="Migrasi Data"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../database/" class="btn btn-neutral" title="Database"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -385,10 +315,10 @@ cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../migrasi/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../database/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../custom_atom/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../install_mkdocs/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Install Atom - My Docs</title>
+  <title>Keycloak - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Install Atom";
-    var mkdocs_page_input_path = "atom.md";
+    var mkdocs_page_name = "Keycloak";
+    var mkdocs_page_input_path = "keycloak.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -70,7 +70,42 @@
           
             <li class="toctree-l1">
 		
+    <a class="" href="../install_grafana/">Grafana</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_atom/">AtoM</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../migrasi/">Migrasi Data</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../custom_atom/">Custom AtoM</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
     <a class="" href="../extend_disk/">Extend Disk Size</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../generate_ssh/">Generate SSH key on Putty</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../grafana/">Grafana</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -95,30 +130,65 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
+    <a class="" href="../harvest_data_simpul/">Harvest data simpul ke JIKN</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_mkdocs/">Mkdocs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_openedx/">OpenEDX in docker</a>
 	    </li>
           
             <li class="toctree-l1 current">
 		
-    <a class="current" href="./">Install Atom</a>
+    <a class="current" href="./">Keycloak</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#4-install-atom">4. Install AtoM</a></li>
-    
-
-    <li class="toctree-l2"><a href="#5-membuat-env-variable-dan-menjalankan-container-optional">5. membuat env variable dan menjalankan container (optional)</a></li>
-    
-
-    <li class="toctree-l2"><a href="#mode-docker-swarm">mode docker swarm</a></li>
-    
-
-    <li class="toctree-l2"><a href="#6-build-stylesheets">6. build stylesheets</a></li>
-    
-
-    <li class="toctree-l2"><a href="#7-purgehapus-data-dari-database-atom-dengan-mengunakan-mode-demo">7. purge/hapus data dari database atom dengan mengunakan mode demo</a></li>
-    
-
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../membuat_docker_image/">Membuat docker image</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mounting_new_disk/">Mounting new disk in server</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../nfs_in_dockerswarm/">NFS in Docker Swarm</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../permasalahandns/">Permasalahan yang sering terjadi</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../query_data_kearsipan/">Query Data Kearsipan</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../setup_ha/">Setup HA app with Docker Swarm and Gulster</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../share_data/">Share data among machines [docker]</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traefik_ownssl_certs/">Traefik and Own SSL certs</a>
 	    </li>
           
         </ul>
@@ -143,7 +213,7 @@
     
       
     
-    <li>Install Atom</li>
+    <li>Keycloak</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -153,91 +223,12 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="4-install-atom">4. Install AtoM</h3>
-<p><strong>Catatan: Instalasi pada simpul resource tidak dibatasi</strong>
-versi 2.5</p>
-<p>sesuaikan <strong>nama_simpul</strong>, konfigurasi pada file <strong>sikn.yml</strong> di docker-yml/sikn.yml
-find and replace nama_simpul dengan nama simpul baru (alt + r) pada nano editor<br />
-pastikan port pada service nginx belum digunakan sebelumnya</p>
-<pre><code>mkdir -p /sikn \
-&amp;&amp; cd /sikn \
-&amp;&amp; git clone -b stable/2.5.x https://github.com/gitsikn/atom.git nama_simpul &amp;&amp; cd /sikn/nama_simpul/docker/
-</code></pre>
-
-<pre><code>chmod -R 755 /nama_simpul
-</code></pre>
-
-<pre><code>sudo chmod -R 777 /sikn/nama_simpul/percona_data \
-&amp;&amp; sudo chmod -R 777 /sikn/nama_simpul/elasticsearch_data
-</code></pre>
-
-<p>sesuikan parameter database pada file docker-stack.yml</p>
-<p>password dapat digenerate menggunakan tools keypass</p>
-<pre><code>...
-#percona_database
-  percona:
-    image: percona:5.6
-    environment:
-      - MYSQL_ROOT_PASSWORD=changethis
-      - MYSQL_DATABASE=nama_simpul
-      - MYSQL_USER=nama_simpul
-      - MYSQL_PASSWORD=changethis
-...
-</code></pre>
-
-<h3 id="5-membuat-env-variable-dan-menjalankan-container-optional">5. membuat env variable dan menjalankan container (optional)</h3>
-<pre><code>export COMPOSE_FILE=&quot;$PWD/docker/docker-compose.dev.yml&quot;
-</code></pre>
-
-<p>atau dieksekusi dengan pilihan -f lokasi_file</p>
-<pre><code>cd nama_simpul
-docker-compose -f docker-compose.yml up -d
-</code></pre>
-
-<h3 id="mode-docker-swarm">mode docker swarm</h3>
-<pre><code>docker stack deploy -c docker-stack.yml nama_simpul
-</code></pre>
-
-<p>periksa seluruh container hingga seluruh container dengan status running</p>
-<pre><code>docker stack ls
-docker stack ps nama_stack
-docker service logs nama_service
-</code></pre>
-
-<pre><code>docker ps -a
-</code></pre>
-
-<h3 id="6-build-stylesheets">6. build stylesheets</h3>
-<pre><code>docker ps
-docker-compose -f docker-compose-file.yml exec service_name make -C plugins/arDominionPlugin
-</code></pre>
-
-<p>atau</p>
-<pre><code>docker exec container_id make -C plugins/arDominionPlugin
-</code></pre>
-
-<p>atau<br />
-masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
-<pre><code>make -C plugins/arDominionPlugin
-</code></pre>
-
-<h3 id="7-purgehapus-data-dari-database-atom-dengan-mengunakan-mode-demo">7. purge/hapus data dari database atom dengan mengunakan mode demo</h3>
-<pre><code>docker-compose exec atom php symfony tools:purge --demo
-php symfony cc &amp;&amp; php symfony search:populate
-</code></pre>
-
-<p>atau
-masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
-<pre><code>php symfony tools:purge --demo
-</code></pre>
-
-<ol>
-<li>restart container worker</li>
-</ol>
-<pre><code>docker restart $(docker ps -a -q)
-</code></pre>
-
-<p>melihat seluruh container dengan status up/exited</p>
+                <p>Referensi
+https://osc.github.io/ood-documentation/master/authentication/tutorial-oidc-keycloak-rhel7/install-keycloak.html</p>
+<p>open firewall<br />
+http://ask.xmodulo.com/open-port-firewall-centos-rhel.html</p>
+<p>jenkins and keycloak
+https://wiki.jenkins.io/display/JENKINS/keycloak-plugin</p>
               
             </div>
           </div>
@@ -245,8 +236,10 @@ masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../membuat_docker_image/" class="btn btn-neutral float-right" title="Membuat docker image">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../bestpractise/" class="btn btn-neutral" title="Best Practice Migrasi Perpusnas ANRI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../install_openedx/" class="btn btn-neutral" title="OpenEDX in docker"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -272,8 +265,10 @@ masuk ke docker gui (portainer) dan masuk ke console AtoM</p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../bestpractise/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../install_openedx/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../membuat_docker_image/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

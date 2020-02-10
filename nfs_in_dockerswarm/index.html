@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Best Practice Migrasi Perpusnas ANRI - My Docs</title>
+  <title>NFS in Docker Swarm - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Best Practice Migrasi Perpusnas ANRI";
-    var mkdocs_page_input_path = "bestpractise.md";
+    var mkdocs_page_name = "NFS in Docker Swarm";
+    var mkdocs_page_input_path = "nfs_in_dockerswarm.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -83,36 +83,9 @@
     <a class="" href="../migrasi/">Migrasi Data</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Best Practice Migrasi Perpusnas ANRI</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#versi-qa-26x">Versi qa 2.6.x</a></li>
-    
-
-    <li class="toctree-l2"><a href="#referensi-docker-stack">referensi docker-stack</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#membuat-database-baru">Membuat database baru</a></li>
-        
-            <li><a class="toctree-l3" href="#download-data">Download data</a></li>
-        
-            <li><a class="toctree-l3" href="#copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</a></li>
-        
-            <li><a class="toctree-l3" href="#restore-database">Restore Database</a></li>
-        
-            <li><a class="toctree-l3" href="#upgrade-database">Upgrade Database</a></li>
-        
-            <li><a class="toctree-l3" href="#download-objek-digital">Download Objek Digital</a></li>
-        
-            <li><a class="toctree-l3" href="#logo-dan-favicon">Logo dan Favicon</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -185,9 +158,24 @@
     <a class="" href="../mounting_new_disk/">Mounting new disk in server</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../nfs_in_dockerswarm/">NFS in Docker Swarm</a>
+    <a class="current" href="./">NFS in Docker Swarm</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#nfs-in-centos">NFS in centos</a></li>
+    
+
+    <li class="toctree-l2"><a href="#membuat-nfs-di-centos">membuat nfs di centos</a></li>
+    
+
+    <li class="toctree-l2"><a href="#server-side">SERVER SIDE</a></li>
+    
+
+    <li class="toctree-l2"><a href="#client-side">CLIENT SIDE</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -237,7 +225,7 @@
     
       
     
-    <li>Best Practice Migrasi Perpusnas ANRI</li>
+    <li>NFS in Docker Swarm</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -247,108 +235,115 @@
           <div role="main">
             <div class="section">
               
-                <p>konek ke vpn</p>
-<p>Login ke server/portainer dimana aplikasi akan dideploy: <br />
-a. worker1<br />
-b. worker2<br />
-c. worker3<br />
-d. worker4<br />
-e. worker5<br />
-f. worker6   </p>
-<pre><code>cd /sikn \
-&amp;&amp; sudo git clone -b stable/2.5.x https://github.com/gitsikn/atom.git nama_simpul
-</code></pre>
-
-<h3 id="versi-qa-26x">Versi qa 2.6.x</h3>
-<pre><code>cd /sikn \
-git clone -b qa/2.6.x https://github.com/artefactual/atom.git nama_simpul
-</code></pre>
-
-<pre><code>sudo chmod -R 777 /sikn/nama_simpul/percona_data \
-&amp;&amp; sudo chmod -R 777 /sikn/nama_simpul/elasticsearch_data
-</code></pre>
-
-<h2 id="referensi-docker-stack">referensi docker-stack</h2>
-<blockquote>
-<p>https://github.com/gitsikn/atom/blob/stable/2.5.x/docker/docker-stack.yml</p>
-<p>sesuaikan nama_simpul dengan nama simpul yang akan dideploy</p>
-</blockquote>
+                <h3 id="nfs-in-centos">NFS in centos</h3>
+<p>https://www.howtoforge.com/nfs-server-and-client-on-centos-7</p>
+<p>https://gist.github.com/ruanbekker/4a9c0d250bce9f84482f2a788ce92131#file-docker-nfs-volumes-md  <br />
+https://blog.dahanne.net/2017/11/20/docker-swarm-and-nfs-volumes/<br />
+https://sysadmins.co.za/docker-swarm-persistent-storage-with-nfs/<br />
+http://rockstor.com/docs/install.html<br />
+https://github.com/ContainX/docker-volume-netshare<br />
+https://www.portainer.io/2018/07/use-nfs-docker-local%E2%80%8B-volume-driver-portainer-io/  </p>
+<h2 id="membuat-nfs-di-centos">membuat nfs di centos</h2>
+<h2 id="server-side">SERVER SIDE</h2>
 <ol>
-<li>Masuk kedalam Portainer
-membuat stack dengan nama simpul</li>
+<li>install packages:</li>
 </ol>
-<p>deploy</p>
-<p>jalankan di container "atom"</p>
-<pre><code>make -C plugins/arDominionPlugin \
-&amp;&amp; php symfony tools:purge --demo
+<pre><code>yum install nfs-utils
 </code></pre>
 
-<p>publish port (jangan bentrok)</p>
-<p>test di browser
-http://192.168.101.100:63106</p>
-<p>https://github.com/gitsikn/docker_documentation/wiki/6.-Migrasi-Data</p>
-<h3 id="membuat-database-baru">Membuat database baru</h3>
-<blockquote>
-<p>Lokasi Eksekusi: Container Percona (database)</p>
-</blockquote>
-<pre><code>mysql -u root -p -e 'drop database nama_simpul;'
-mysql -u root -p -e 'create database nama_simpul character set utf8 collate utf8_unicode_ci;'
+<ol>
+<li>membuat directory yang akan dishare melalui NFS</li>
+</ol>
+<pre><code>mkdir /var/nfsshare
 </code></pre>
 
-<h3 id="download-data">Download data</h3>
-<p>mkdir -p /sikn/backup_data/nama_simpul  </p>
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+<ol>
+<li>atur permisi dari directory /var/nfsshare</li>
+</ol>
+<pre><code>chmod -R 777 /var/nfsshare
+chown nfsnobody:nfsnobody /var/nfsshare
 </code></pre>
 
-<p>atau jika menggunakan port tertentu</p>
-<pre><code>rsync -r -v --progress -e 'ssh -p 221' anri@103.28.21.27:/tmp/nama_simpul.sql /sikn/backup_data/nama_simpul
+<ol>
+<li>start and enable service</li>
+</ol>
+<pre><code>systemctl enable rpcbind \
+&amp;&amp; systemctl enable nfs-server \
+&amp;&amp; systemctl enable nfs-lock \
+&amp;&amp; systemctl enable nfs-idmap \
+&amp;&amp; systemctl start rpcbind \
+&amp;&amp; systemctl start nfs-server \
+&amp;&amp; systemctl start nfs-lock \
+&amp;&amp; systemctl start nfs-idmap
 </code></pre>
 
-<h3 id="copy-data-dari-direktory-backup-ke-lokasi-database">Copy data dari direktory backup ke lokasi database</h3>
-<pre><code>cp -rf /sikn/backup_data/nama_simpul/nama_simpul.sql /sikn/nama_simpul/percona_data
-
+<ol>
+<li>membuat file yang berisi konfigurasi informasi client dan hak yang diberikan </li>
+</ol>
+<pre><code>nano /etc/exports
 </code></pre>
 
-<h3 id="restore-database">Restore Database</h3>
-<blockquote>
-<p>lokasi: Container Database</p>
-</blockquote>
-<pre><code>mysql -u root -p nama_simpul &lt; /var/lib/mysql/nama_simpul.sql;
+<pre><code>/var/nfsshare    192.168.101.101(rw,sync,no_root_squash,no_all_squash)
 </code></pre>
 
-<h3 id="upgrade-database">Upgrade Database</h3>
-<blockquote>
-<p>lokasi: container atom</p>
-</blockquote>
-<pre><code>php symfony tools:upgrade-sql
+<p>catatan: 192.168.101.101 adalah alamat client yang berhak mengakses dir nfs, 
+dapat menggunakan * agar dir nfs bisa diakses oleh client tidak terdaftar</p>
+<ol>
+<li>restart service nfs</li>
+</ol>
+<pre><code>systemctl restart nfs-server
 </code></pre>
 
-<pre><code>php symfony cc \
-&amp;&amp; php symfony search:populate
+<ol>
+<li>pengaturan service nfs di firewall</li>
+</ol>
+<pre><code>firewall-cmd --permanent --zone=public --add-service=nfs
+firewall-cmd --permanent --zone=public --add-service=mountd
+firewall-cmd --permanent --zone=public --add-service=rpc-bind
+firewall-cmd --reload
 </code></pre>
 
-<h3 id="download-objek-digital">Download Objek Digital</h3>
-<pre><code>mkdir -p /sikn/backup_data/nama_simpul/ \
-cd /sikn/backup_data/nama_simpul \
-&amp;&amp; rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/uploads /sikn/backup_data/nama_simpul/
+<hr />
+<h2 id="client-side">CLIENT SIDE</h2>
+<p>CentOS
+1. Install the nfs-utild package</p>
+<pre><code>yum install nfs-utils
 </code></pre>
 
-<pre><code>cp -rf /sikn/backup_data/nama_simpul/uploads /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/uploads
+<p>Ubuntu</p>
+<pre><code>sudo apt-get install nfs-common
 </code></pre>
 
-<h3 id="logo-dan-favicon">Logo dan Favicon</h3>
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/images/logo.png /sikn/backup_data/nama_simpul
+<ol>
+<li>membuat NFS directory mounts points</li>
+</ol>
+<pre><code>mkdir -p /mnt/docker_volume  
+sudo chown nobody:nogroup /mnt/docker_volume
 </code></pre>
 
-<pre><code>rsync -r -v --progress -e ssh anri@103.28.21.27:/usr/share/nginx/nama_simpul/favicon.ico /sikn/backup_data/nama_simpul
+<ol>
+<li>mount nfs ke directory yg sudah dibuat pada sisi client </li>
+</ol>
+<pre><code>mount -t nfs 192.168.101.30:export/container /mnt/docker_volume
 </code></pre>
 
-<p>```
-cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/favicon.ico</p>
-<p>cp -rf /sikn/backup_data/nama_simpul/logo.png /sikn/nama_simpul/ \
-&amp;&amp; chmod -R 0755 /sikn/nama_simpul/images/logo.png</p>
+<ol>
+<li>cek nfs </li>
+</ol>
+<pre><code>df -kh
+</code></pre>
+
+<ol>
+<li>permanent nsf mounting</li>
+</ol>
+<pre><code>nano /etc/fstab
+</code></pre>
+
+<pre><code>[...]
+192.168.101.30:export/container    /mnt/docker_volume   nfs defaults 0 0
+</code></pre>
+
+<p>https://www.suse.com/documentation/sle-ha-12/singlehtml/book_sleha_techguides/book_sleha_techguides.html</p>
               
             </div>
           </div>
@@ -356,10 +351,10 @@ cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../custom_atom/" class="btn btn-neutral float-right" title="Custom AtoM">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../permasalahandns/" class="btn btn-neutral float-right" title="Permasalahan yang sering terjadi">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../migrasi/" class="btn btn-neutral" title="Migrasi Data"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../mounting_new_disk/" class="btn btn-neutral" title="Mounting new disk in server"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -385,10 +380,10 @@ cp -rf /sikn/backup_data/nama_simpul/favicon.ico /sikn/nama_simpul/ \
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../migrasi/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../mounting_new_disk/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../custom_atom/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../permasalahandns/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
