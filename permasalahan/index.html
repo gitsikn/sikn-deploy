@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Mkdocs - My Docs</title>
+  <title>Permasalahan yang sering terjadi - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Mkdocs";
-    var mkdocs_page_input_path = "install_mkdocs.md";
+    var mkdocs_page_name = "Permasalahan yang sering terjadi";
+    var mkdocs_page_input_path = "permasalahan.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -128,12 +128,9 @@
     <a class="" href="../harvest_data_simpul/">Harvest data simpul ke JIKN</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Mkdocs</a>
-    <ul class="subnav">
-            
-    </ul>
+    <a class="" href="../install_mkdocs/">Mkdocs</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -161,9 +158,24 @@
     <a class="" href="../nfs_in_dockerswarm/">NFS in Docker Swarm</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../permasalahan/">Permasalahan yang sering terjadi</a>
+    <a class="current" href="./">Permasalahan yang sering terjadi</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#nfs-in-centos">NFS in centos</a></li>
+    
+
+    <li class="toctree-l2"><a href="#membuat-nfs-di-centos">membuat nfs di centos</a></li>
+    
+
+    <li class="toctree-l2"><a href="#server-side">SERVER SIDE</a></li>
+    
+
+    <li class="toctree-l2"><a href="#client-side">CLIENT SIDE</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -228,7 +240,7 @@
     
       
     
-    <li>Mkdocs</li>
+    <li>Permasalahan yang sering terjadi</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -238,38 +250,115 @@
           <div role="main">
             <div class="section">
               
-                <p>Referensi<br />
-https://www.mkdocs.org/<br />
-https://romandc.com/techtalk-mkdocs/</p>
-<p>install Mkdocs<br />
-Kebutuhan
-Python 
-PIP 
-MkDocs supports Python versions 2.7, 3.4, 3.5, 3.6, 3.7 and pypy.</p>
-<p>Enable the EPEL repository  </p>
-<p><code>yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</code>
-``
-Install PIP </p>
-<pre><code>sudo yum install python-pip
+                <h3 id="nfs-in-centos">NFS in centos</h3>
+<p>https://www.howtoforge.com/nfs-server-and-client-on-centos-7</p>
+<p>https://gist.github.com/ruanbekker/4a9c0d250bce9f84482f2a788ce92131#file-docker-nfs-volumes-md  <br />
+https://blog.dahanne.net/2017/11/20/docker-swarm-and-nfs-volumes/<br />
+https://sysadmins.co.za/docker-swarm-persistent-storage-with-nfs/<br />
+http://rockstor.com/docs/install.html<br />
+https://github.com/ContainX/docker-volume-netshare<br />
+https://www.portainer.io/2018/07/use-nfs-docker-local%E2%80%8B-volume-driver-portainer-io/  </p>
+<h2 id="membuat-nfs-di-centos">membuat nfs di centos</h2>
+<h2 id="server-side">SERVER SIDE</h2>
+<ol>
+<li>install packages:</li>
+</ol>
+<pre><code>yum install nfs-utils
 </code></pre>
 
-<p>Install virtualenv</p>
-<pre><code>pip install virtualenv
+<ol>
+<li>membuat directory yang akan dishare melalui NFS</li>
+</ol>
+<pre><code>mkdir /var/nfsshare
 </code></pre>
 
-<p>Upgrade PIP </p>
-<pre><code>pip install --upgrade pip
+<ol>
+<li>atur permisi dari directory /var/nfsshare</li>
+</ol>
+<pre><code>chmod -R 777 /var/nfsshare
+chown nfsnobody:nfsnobody /var/nfsshare
 </code></pre>
 
-<p>membuat virtual environment</p>
-<pre><code>virtualenv env
-source env/bin/activate
+<ol>
+<li>start and enable service</li>
+</ol>
+<pre><code>systemctl enable rpcbind \
+&amp;&amp; systemctl enable nfs-server \
+&amp;&amp; systemctl enable nfs-lock \
+&amp;&amp; systemctl enable nfs-idmap \
+&amp;&amp; systemctl start rpcbind \
+&amp;&amp; systemctl start nfs-server \
+&amp;&amp; systemctl start nfs-lock \
+&amp;&amp; systemctl start nfs-idmap
 </code></pre>
 
-<p>generate project</p>
-<pre><code>mkdocs new my-project
-cd my-project
+<ol>
+<li>membuat file yang berisi konfigurasi informasi client dan hak yang diberikan </li>
+</ol>
+<pre><code>nano /etc/exports
 </code></pre>
+
+<pre><code>/var/nfsshare    192.168.101.101(rw,sync,no_root_squash,no_all_squash)
+</code></pre>
+
+<p>catatan: 192.168.101.101 adalah alamat client yang berhak mengakses dir nfs, 
+dapat menggunakan * agar dir nfs bisa diakses oleh client tidak terdaftar</p>
+<ol>
+<li>restart service nfs</li>
+</ol>
+<pre><code>systemctl restart nfs-server
+</code></pre>
+
+<ol>
+<li>pengaturan service nfs di firewall</li>
+</ol>
+<pre><code>firewall-cmd --permanent --zone=public --add-service=nfs
+firewall-cmd --permanent --zone=public --add-service=mountd
+firewall-cmd --permanent --zone=public --add-service=rpc-bind
+firewall-cmd --reload
+</code></pre>
+
+<hr />
+<h2 id="client-side">CLIENT SIDE</h2>
+<p>CentOS
+1. Install the nfs-utild package</p>
+<pre><code>yum install nfs-utils
+</code></pre>
+
+<p>Ubuntu</p>
+<pre><code>sudo apt-get install nfs-common
+</code></pre>
+
+<ol>
+<li>membuat NFS directory mounts points</li>
+</ol>
+<pre><code>mkdir -p /mnt/docker_volume  
+sudo chown nobody:nogroup /mnt/docker_volume
+</code></pre>
+
+<ol>
+<li>mount nfs ke directory yg sudah dibuat pada sisi client </li>
+</ol>
+<pre><code>mount -t nfs 192.168.101.30:export/container /mnt/docker_volume
+</code></pre>
+
+<ol>
+<li>cek nfs </li>
+</ol>
+<pre><code>df -kh
+</code></pre>
+
+<ol>
+<li>permanent nsf mounting</li>
+</ol>
+<pre><code>nano /etc/fstab
+</code></pre>
+
+<pre><code>[...]
+192.168.101.30:export/container    /mnt/docker_volume   nfs defaults 0 0
+</code></pre>
+
+<p>https://www.suse.com/documentation/sle-ha-12/singlehtml/book_sleha_techguides/book_sleha_techguides.html</p>
               
             </div>
           </div>
@@ -277,10 +366,10 @@ cd my-project
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../install_openedx/" class="btn btn-neutral float-right" title="OpenEDX in docker">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../query_data_kearsipan/" class="btn btn-neutral float-right" title="Query Data Kearsipan">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../harvest_data_simpul/" class="btn btn-neutral" title="Harvest data simpul ke JIKN"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../nfs_in_dockerswarm/" class="btn btn-neutral" title="NFS in Docker Swarm"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -306,10 +395,10 @@ cd my-project
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../harvest_data_simpul/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../nfs_in_dockerswarm/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../install_openedx/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../query_data_kearsipan/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -62,34 +62,27 @@
     
         <ul>
         
-            <li><a class="toctree-l3" href="#set-domain-name">set domain name</a></li>
+            <li><a class="toctree-l3" href="#set-domain-name">Set Domain Name</a></li>
         
             <li><a class="toctree-l3" href="#install-the-latest-updates">Install the latest updates</a></li>
         
             <li><a class="toctree-l3" href="#ubuntu">Ubuntu</a></li>
         
-            <li><a class="toctree-l3" href="#1-download-dan-install-docker">1. download dan install docker</a></li>
+            <li><a class="toctree-l3" href="#1-download-dan-install-docker">1. Download dan Install Docker</a></li>
         
-            <li><a class="toctree-l3" href="#configure-docker-to-start-on-boot">Configure Docker to start on boot</a></li>
+            <li><a class="toctree-l3" href="#2-install-docker-compose-skip-jika-mengggunakan-docker-swarm">2. Install Docker-Compose (Skip jika mengggunakan docker swarm)</a></li>
         
-            <li><a class="toctree-l3" href="#2-install-docker-compose-skip-jika-mengggunakan-docker-swarm">2. install docker-compose (Skip jika mengggunakan docker swarm)</a></li>
-        
-            <li><a class="toctree-l3" href="#test-docker-installation">test docker installation</a></li>
-        
-            <li><a class="toctree-l3" href="#3-test-instalasi-docker-compose">3. test instalasi docker-compose</a></li>
-        
-            <li><a class="toctree-l3" href="#set-docker-experimental">Set Docker Experimental</a></li>
-        
-            <li><a class="toctree-l3" href="#open-port-on-ubuntu">Open Port on Ubuntu</a></li>
-        
-            <li><a class="toctree-l3" href="#open-port-on-centos">Open Port on CentOS</a></li>
-        
-            <li><a class="toctree-l3" href="#set-up-swarm-mode">Set up swarm mode</a></li>
+            <li><a class="toctree-l3" href="#3-test-instalasi-docker-compose">3. Test Instalasi Docker-Compose</a></li>
         
         </ul>
     
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_atom/">AtoM</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -109,22 +102,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../install_atom/">AtoM</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
     <a class="" href="../migrasi/">Migrasi Data</a>
 	    </li>
           
             <li class="toctree-l1">
 		
     <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../custom_atom/">Custom AtoM</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -199,7 +182,7 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../permasalahandns/">Permasalahan yang sering terjadi</a>
+    <a class="" href="../permasalahan/">Permasalahan yang sering terjadi</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -220,6 +203,26 @@
             <li class="toctree-l1">
 		
     <a class="" href="../traefik_ownssl_certs/">Traefik and Own SSL certs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mailhelpdesk/">Mail Setting Helpdesk</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../pic_helpdesk/">Data PIC Helpdesk Nasional</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../kepuasan_layanan/">Data Survey Kepuasan Layanan SIKN dan JIKN</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../layanan_sjikn/">Data Layanan SIKN dan JIKN</a>
 	    </li>
           
         </ul>
@@ -255,23 +258,23 @@
             <div class="section">
               
                 <h2 id="melihat-spesifikasi-server">Melihat Spesifikasi server</h2>
-<p>melihat cpu</p>
+<p>Melihat cpu</p>
 <pre><code>lscpu
 </code></pre>
 
-<p>informasi memory</p>
+<p>Informasi memory</p>
 <pre><code>free -m
 </code></pre>
 
-<p>informasi disk</p>
+<p>Informasi disk</p>
 <pre><code>df -h
 </code></pre>
 
-<p>informasi OS</p>
+<p>Informasi OS</p>
 <pre><code>lsb_release -a
 </code></pre>
 
-<h3 id="set-domain-name">set domain name</h3>
+<h3 id="set-domain-name">Set Domain Name</h3>
 <pre><code>export USE_HOSTNAME=nama_domain.go.id \
 &amp;&amp; echo $USE_HOSTNAME &gt; /etc/hostname \
 &amp;&amp; hostname -F /etc/hostname
@@ -287,33 +290,33 @@
 yum upgrade
 </code></pre>
 
-<h3 id="1-download-dan-install-docker">1. download dan install docker</h3>
+<h3 id="1-download-dan-install-docker">1. Download dan Install Docker</h3>
 <pre><code>mkdir -p /opt/docker \
 &amp;&amp; cd /opt/docker \
 &amp;&amp; curl -fsSL get.docker.com -o get-docker.sh \
 &amp;&amp; CHANNEL=stable sh get-docker.sh
 </code></pre>
 
-<h3 id="configure-docker-to-start-on-boot">Configure Docker to start on boot</h3>
+<p><strong>Configure Docker to start on boot</strong></p>
 <pre><code>sudo systemctl enable docker &amp;&amp; sudo systemctl start docker
 </code></pre>
 
-<h3 id="2-install-docker-compose-skip-jika-mengggunakan-docker-swarm">2. install docker-compose (Skip jika mengggunakan docker swarm)</h3>
+<h3 id="2-install-docker-compose-skip-jika-mengggunakan-docker-swarm">2. Install Docker-Compose (Skip jika mengggunakan docker swarm)</h3>
 <pre><code>sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 </code></pre>
 
-<h3 id="test-docker-installation">test docker installation</h3>
+<p><strong>Test Docker Installation</strong></p>
 <pre><code>docker --version \
 &amp;&amp; docker run hello-world
 </code></pre>
 
-<h3 id="3-test-instalasi-docker-compose">3. test instalasi docker-compose</h3>
+<h3 id="3-test-instalasi-docker-compose">3. Test Instalasi Docker-Compose</h3>
 <pre><code>docker-compose --version
 </code></pre>
 
-<h3 id="set-docker-experimental">Set Docker Experimental</h3>
+<p><strong>Set Docker Experimental</strong></p>
 <pre><code>echo $'{\n    &quot;experimental&quot;: true\n}' | sudo tee /etc/docker/daemon.json;
 systemctl restart docker
 </code></pre>
@@ -348,7 +351,7 @@ Edit <strong>/etc/sysctl.conf</strong> dengan menambahkan  </p>
 <pre><code>reboot
 </code></pre>
 
-<h3 id="open-port-on-ubuntu">Open Port on Ubuntu</h3>
+<p><strong>Open Port on Ubuntu</strong></p>
 <pre><code>ufw allow 22/tcp
 ufw allow 2376/tcp
 ufw allow 2377/tcp
@@ -358,7 +361,7 @@ ufw allow 4789/udp
 ufw reload
 </code></pre>
 
-<h3 id="open-port-on-centos">Open Port on CentOS</h3>
+<p><strong>Open Port on CentOS</strong></p>
 <pre><code>firewall-cmd --add-port=22/tcp --permanent
 firewall-cmd --add-port=2376/tcp --permanent
 firewall-cmd --add-port=2377/tcp --permanent
@@ -368,7 +371,7 @@ firewall-cmd --add-port=4789/udp --permanent
 firewall-cmd --reload
 </code></pre>
 
-<h3 id="set-up-swarm-mode">Set up swarm mode</h3>
+<p><strong>Set up swarm mode</strong></p>
 <pre><code>docker swarm init
 </code></pre>
 
@@ -390,7 +393,7 @@ firewall-cmd --reload
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../traefik/" class="btn btn-neutral float-right" title="Traefik">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../install_atom/" class="btn btn-neutral float-right" title="AtoM">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -422,7 +425,7 @@ firewall-cmd --reload
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../traefik/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../install_atom/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

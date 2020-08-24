@@ -58,21 +58,6 @@
     <a class="" href="../install_docker/">Docker</a>
 	    </li>
           
-            <li class="toctree-l1">
-		
-    <a class="" href="../traefik/">Traefik</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../portainer/">Portainer</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../install_grafana/">Grafana</a>
-	    </li>
-          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">AtoM</a>
@@ -96,7 +81,25 @@
     <li class="toctree-l2"><a href="#11-test-atom">11. test AtoM</a></li>
     
 
+    <li class="toctree-l2"><a href="#12-custom-atom">12. Custom AtoM</a></li>
+    
+
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traefik/">Traefik</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../portainer/">Portainer</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install_grafana/">Grafana</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -107,11 +110,6 @@
             <li class="toctree-l1">
 		
     <a class="" href="../bestpractise/">Best Practice Migrasi Perpusnas ANRI</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../custom_atom/">Custom AtoM</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -186,7 +184,7 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../permasalahandns/">Permasalahan yang sering terjadi</a>
+    <a class="" href="../permasalahan/">Permasalahan yang sering terjadi</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -207,6 +205,26 @@
             <li class="toctree-l1">
 		
     <a class="" href="../traefik_ownssl_certs/">Traefik and Own SSL certs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mailhelpdesk/">Mail Setting Helpdesk</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../pic_helpdesk/">Data PIC Helpdesk Nasional</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../kepuasan_layanan/">Data Survey Kepuasan Layanan SIKN dan JIKN</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../layanan_sjikn/">Data Layanan SIKN dan JIKN</a>
 	    </li>
           
         </ul>
@@ -244,7 +262,7 @@
                 <h3 id="4-install-atom">4. Install AtoM</h3>
 <p><strong>Catatan: Instalasi pada simpul resource tidak dibatasi</strong>
 versi 2.5</p>
-<p>sesuaikan <strong>nama_simpul</strong>, konfigurasi pada file <strong>sikn.yml</strong> di docker-yml/sikn.yml
+<p>Sesuaikan <strong>nama_simpul</strong>, konfigurasi pada file <strong>sikn.yml</strong> di docker-yml/sikn.yml
 find and replace nama_simpul dengan nama simpul baru (alt + r) pada nano editor<br />
 pastikan port pada service nginx belum digunakan sebelumnya</p>
 <pre><code>mkdir -p /sikn \
@@ -332,6 +350,12 @@ docker ps -aq</p>
 <h3 id="11-test-atom">11. test AtoM</h3>
 <p>tambahkan dns lokal pada file C:\Windows\System32\drivers\etc\host</p>
 <p>sikn.nama_simpul.go.id</p>
+<h3 id="12-custom-atom">12. Custom AtoM</h3>
+<p>custom AtoM</p>
+<p>Mengubaha default languange</p>
+<p>pada file data/fixtures/settings.yml</p>
+<p>bagian QubitSetting_26:
+scope: i18n_languages</p>
               
             </div>
           </div>
@@ -339,10 +363,10 @@ docker ps -aq</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../migrasi/" class="btn btn-neutral float-right" title="Migrasi Data">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../traefik/" class="btn btn-neutral float-right" title="Traefik">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../install_grafana/" class="btn btn-neutral" title="Grafana"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../install_docker/" class="btn btn-neutral" title="Docker"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -368,10 +392,10 @@ docker ps -aq</p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../install_grafana/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../install_docker/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../migrasi/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../traefik/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
